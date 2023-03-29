@@ -65,3 +65,61 @@ ON videogames.id = award_videogame.videogame_id
 JOIN awards 
 ON award_videogame.award_id = awards.id
 GROUP BY software_houses.name, awards.name;
+
+6.SELECT DISTINCT categories.name AS nome_categoria , pegi_labels.id AS id_pegi
+FROM categories
+JOIN category_videogame 
+ON categories.id = category_videogame.category_id
+JOIN pegi_label_videogame 
+ON category_videogame.videogame_id = pegi_label_videogame.videogame_id
+JOIN pegi_labels 
+ON pegi_label_videogame.pegi_label_id = pegi_labels.id
+JOIN reviews 
+ON reviews.videogame_id = pegi_label_videogame.videogame_id
+WHERE reviews.rating >= 4 AND reviews.rating <= 5
+GROUP BY categories.name, pegi_labels.id;
+
+7.SELECT DISTINCT videogames.name AS nome_giochi_presenti
+FROM videogames
+JOIN tournament_videogame 
+ON videogames.id = tournament_videogame.videogame_id
+JOIN player_tournament 
+ON tournament_videogame.tournament_id = player_tournament.tournament_id
+JOIN players 
+ON player_tournament.player_id = players.id
+WHERE players.name LIKE 'S%'
+
+8.SELECT DISTINCT tournaments.city AS city_name
+FROM tournaments
+JOIN tournament_videogame 
+ON tournaments.id = tournament_videogame.tournament_id
+JOIN videogames 
+ON tournament_videogame.videogame_id = videogames.id
+JOIN award_videogame 
+ON videogames.id = award_videogame.videogame_id
+JOIN awards 
+ON award_videogame.award_id = awards.id
+WHERE tournaments.year = 2018 AND awards.name = "Gioco dell'anno";       ???
+
+9.SELECT DISTINCT players.*                                             ???
+FROM players
+JOIN player_tournament 
+ON players.id = player_tournament.player_id
+JOIN tournaments 
+ON player_tournament.tournament_id = tournaments.id
+JOIN tournament_videogame 
+ON tournaments.id = tournament_videogame.tournament_id
+JOIN videogames 
+ON tournament_videogame.videogame_id = videogames.id
+JOIN award_videogame 
+ON videogames.id = award_videogame.videogame_id
+JOIN awards 
+ON award_videogame.award_id = awards.id
+JOIN category_videogame
+ON videogames.id = category_videogame.videogame_id
+JOIN categories 
+ON category_videogame.category_id = categories.id
+WHERE tournaments.year = 2019 AND award_videogame.year = 2018 AND awards.name = 'Gioco più atteso'
+ORDER BY players.id;
+
+
